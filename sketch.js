@@ -5,7 +5,7 @@ let w, h;
 let inv = true;
 
 function setup() {
-  createCanvas(800/3, 800/3);
+  createCanvas(windowWidth, windowHeight);
   w = width / cols;
   h = height / rows;
 }
@@ -57,9 +57,15 @@ function keyPressed() {
   }
 }
 
+let fullscreen = false;
 function touchStarted(e) {
+  var fs = fullscreen();
+  if (!fs) {
+    fullscreen(true);
+  }
+
   strokes.push([]);
-  return false;
+  // return false;
 }
 
 function touchMoved(e) {
@@ -75,5 +81,9 @@ function touchMoved(e) {
   }
   let p = {x: cxx, y: cyy}
   strokes[strokes.length-1].push(p);
-  return false;
+  // return false;
+}
+
+function windowResized() {
+  resizeCanvas(windowWidth, windowHeight);
 }
