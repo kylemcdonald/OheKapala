@@ -1,13 +1,12 @@
 let strokes = [];
-let rows = 21;
-let cols = 3;
-let w, h;
+let w = 350, h = 60;
+let rows, cols;
 let inv = true;
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
-  w = width / cols;
-  h = height / rows;
+  cols = width / w;
+  rows = height / h;
 }
 
 function draw() {
@@ -57,22 +56,29 @@ function keyPressed() {
   }
 }
 
-let fullscreen = false;
-function touchStarted(e) {
-  var fs = fullscreen();
-  if (!fs) {
-    fullscreen(true);
-  }
-
+let fs = false;
+function start() {
   strokes.push([]);
-  // return false;
 }
 
-function touchMoved(e) {
-  let cxx = e.x % w;
-  let cyy = e.y % h;
-  let cx = Math.floor(e.x / w);
-  let cy = Math.floor(e.y / h);
+function touchStarted(e) {
+  // var fs = fullscreen();
+  // if (!fs) {
+  //   fullscreen(true);
+  // }
+  start();
+  return false;
+}
+
+function mousePressed() {
+  start();
+}
+
+function drag(x, y) {
+  let cxx = x % w;
+  let cyy = y % h;
+  let cx = Math.floor(x / w);
+  let cy = Math.floor(y / h);
   if (cx % 2 == 0) {
     cxx = w - cxx;
   }
@@ -81,9 +87,19 @@ function touchMoved(e) {
   }
   let p = {x: cxx, y: cyy}
   strokes[strokes.length-1].push(p);
-  // return false;
+}
+
+function touchMoved(t) {
+  drag(t.touches[0].pageX, t.touches[0].pageY);
+  return false;
+}
+
+function mouseDragged(e) {
+  drag(e.x, e.y);
 }
 
 function windowResized() {
   resizeCanvas(windowWidth, windowHeight);
+  cols = width / w;
+  rows = height / h;
 }
